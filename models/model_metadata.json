@@ -16,11 +16,11 @@
     "furnish_unfurnished"
   ],
   "stats": {
-    "area_max": 18000,
+    "area_max": 16200,
     "area_min": 1650,
-    "price_min": 1.920996069908142,
+    "price_min": 1750000.0,
     "price_max": 13300000.0,
-    "price_mean": 4753645.825038172
+    "price_mean": 4766729.247706422
   },
   "binary_mapping": {
     "yes": 1,
