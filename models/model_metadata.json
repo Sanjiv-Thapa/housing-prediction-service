@@ -1,1 +1,35 @@
-{"features": ["area", "bedrooms", "bathrooms", "stories", "mainroad", "guestroom", "basement", "hotwaterheating", "airconditioning", "parking", "prefarea", "furnish_furnished", "furnish_semi-furnished", "furnish_unfurnished"], "stats": {"area_max": 16200, "area_min": 1650}, "binary_mapping": {"yes": 1, "no": 0}, "expected_furnish_categories": ["furnished", "semi-furnished", "unfurnished"]}
+{
+  "features": [
+    "area",
+    "bedrooms",
+    "bathrooms",
+    "stories",
+    "mainroad",
+    "guestroom",
+    "basement",
+    "hotwaterheating",
+    "airconditioning",
+    "parking",
+    "prefarea",
+    "furnish_furnished",
+    "furnish_semi-furnished",
+    "furnish_unfurnished"
+  ],
+  "stats": {
+    "area_max": 18000,
+    "area_min": 1650,
+    "price_min": 1.920996069908142,
+    "price_max": 13300000.0,
+    "price_mean": 4753645.825038172
+  },
+  "binary_mapping": {
+    "yes": 1,
+    "no": 0
+  },
+  "expected_furnish_categories": [
+    "furnished",
+    "semi-furnished",
+    "unfurnished"
+  ],
+  "currency": "INR"
+}
