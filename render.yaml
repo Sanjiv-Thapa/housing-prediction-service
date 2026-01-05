@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: housing-prediction-api
+    env: python
+    region: oregon
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: DATABASE_URL
+        fromDatabase:
+          name: housing-db
+          property: connectionString
+
+databases:
+  - name: housing-db
+    databaseName: housing_prediction
+    user: housing_user
+    plan: free

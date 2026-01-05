@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>House Price Predictor</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f4f7f6;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        button {
+            grid-column: span 2;
+            background: #28a745;
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background: #218838;
+        }
+
+        #result {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 5px;
+            display: none;
+            text-align: center;
+            font-size: 20px;
+        }
+
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>🏡 Advanced House Price Predictor</h2>
+        <form id="predictionForm" class="grid">
+            <div class="form-group">
+                <label>Area (sq ft):</label>
+                <input type="number" id="area" value="5000" required>
+            </div>
+            <div class="form-group">
+                <label>Bedrooms:</label>
+                <input type="number" id="bedrooms" value="3" required>
+            </div>
+            <div class="form-group">
+                <label>Bathrooms:</label>
+                <input type="number" id="bathrooms" value="2" required>
+            </div>
+            <div class="form-group">
+                <label>Stories:</label>
+                <input type="number" id="stories" value="2" required>
+            </div>
+            <div class="form-group">
+                <label>Parking Spaces:</label>
+                <input type="number" id="parking" value="1" required>
+            </div>
+
+            <div class="form-group">
+                <label>Furnishing Status:</label>
+                <select id="furnishingstatus">
+                    <option value="furnished">Furnished</option>
+                    <option value="semi-furnished">Semi-Furnished</option>
+                    <option value="unfurnished">Unfurnished</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Main Road Access:</label>
+                <select id="mainroad">
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Has Guestroom:</label>
+                <select id="guestroom">
+                    <option value="no">No</option>
+                    <option value="yes">Yes</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Has Basement:</label>
+                <select id="basement">
+                    <option value="no">No</option>
+                    <option value="yes">Yes</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Hot Water Heating:</label>
+                <select id="hotwaterheating">
+                    <option value="no">No</option>
+                    <option value="yes">Yes</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Air Conditioning:</label>
+                <select id="airconditioning">
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Preferred Area:</label>
+                <select id="prefarea">
+                    <option value="no">No</option>
+                    <option value="yes">Yes</option>
+                </select>
+            </div>
+
+            <button type="submit">Predict Property Value</button>
+        </form>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        document.getElementById('predictionForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const resultDiv = document.getElementById('result');
+
+            // Map all form fields into the JSON object
+            const data = {
+                area: parseInt(document.getElementById('area').value),
+                bedrooms: parseInt(document.getElementById('bedrooms').value),
+                bathrooms: parseInt(document.getElementById('bathrooms').value),
+                stories: parseInt(document.getElementById('stories').value),
+                mainroad: document.getElementById('mainroad').value,
+                guestroom: document.getElementById('guestroom').value,
+                basement: document.getElementById('basement').value,
+                hotwaterheating: document.getElementById('hotwaterheating').value,
+                airconditioning: document.getElementById('airconditioning').value,
+                parking: parseInt(document.getElementById('parking').value),
+                prefarea: document.getElementById('prefarea').value,
+                furnishingstatus: document.getElementById('furnishingstatus').value
+            };
+
+            try {
+                const response = await fetch('/api/v1/predict/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+                resultDiv.style.display = 'block';
+
+                if (response.ok) {
+                    resultDiv.className = 'success';
+                    const formattedPrice = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(result.predicted_price);
+                    resultDiv.innerHTML = `<strong>Estimated Value:</strong> ${formattedPrice}<br><small style="font-size: 12px; color: #666;">Transaction ID: ${result.record_id}</small>`;
+                } else {
+                    resultDiv.className = 'error';
+                    resultDiv.innerText = "Error: " + JSON.stringify(result.detail);
+                }
+            } catch (err) {
+                console.error(err);
+                alert("Server connection failed.");
+            }
+        });
+    </script>
+</body>
+
+</html>

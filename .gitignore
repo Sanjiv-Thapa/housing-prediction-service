@@ -1,0 +1,28 @@
+# Python-specific ignores
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+env/
+build/
+dist/
+*.egg-info/
+
+# Model & Data files
+# models/*.json  ← Keep commented (models WILL be committed - Good!)
+data/raw/*.csv   ← Add this to ignore raw CSV files
+
+# Database & Environment Secrets
+.env
+*.db
+*.sqlite
+
+# IDE Specific ignores
+.vscode/
+.idea/
+.DS_Store
+
+# Log files
+*.log
